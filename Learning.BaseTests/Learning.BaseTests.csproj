@@ -61,6 +61,10 @@
       <Project>{35CE9001-9604-4AEB-B560-FB6D8E0177A9}</Project>
       <Name>Probability.Markov</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Utils\Utils.csproj">
+      <Project>{ECC97920-6004-424D-A8C2-66934B40486E}</Project>
+      <Name>Utils</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />

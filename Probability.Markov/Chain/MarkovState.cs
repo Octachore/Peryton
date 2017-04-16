@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Peryton.  If not, see <http://www.gnu.org/licenses/>.
 #endregion
-using System.Collections.Generic;
+using Utils;
 
 namespace Probability.Markov.Chain
 {
@@ -26,12 +26,12 @@ namespace Probability.Markov.Chain
     {
         public T Value { get; }
 
-        public IDictionary<MarkovState<T>, double> Links { get; }
+        public AutoDictionary<MarkovState<T>, double> Links { get; }
 
         public MarkovState(T value)
         {
             Value = value;
-            Links = new Dictionary<MarkovState<T>, double>();
+            Links = new AutoDictionary<MarkovState<T>, double>();
         }
     }
 }

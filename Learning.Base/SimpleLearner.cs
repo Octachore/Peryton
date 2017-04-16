@@ -26,7 +26,7 @@ namespace Learning.Base
 {
     public class SimpleLearner<T>
     {
-        private Dictionary<T, MarkovState<T>> _states = new Dictionary<T, MarkovState<T>>();
+        private AutoDictionary<T, MarkovState<T>> _states = new AutoDictionary<T, MarkovState<T>>(key => new MarkovState<T>(key));
 
         public void Learn(IEnumerable<T> seq)
         {
@@ -38,10 +38,6 @@ namespace Learning.Base
             {
                 T first = enumerator.CurrentBlock[0];
                 T second = enumerator.CurrentBlock[1];
-
-                if (!_states.ContainsKey(first)) _states.Add(first, new MarkovState<T>(first));
-                if (!_states.ContainsKey(second)) _states.Add(second, new MarkovState<T>(second));
-                if (!_states[first].Links.ContainsKey(_states[second])) _states[first].Links.Add(_states[second], 0);
 
                 _states[first].Links[_states[second]] += 1;
             }
