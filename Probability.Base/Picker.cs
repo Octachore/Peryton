@@ -42,5 +42,27 @@ namespace Probability.Base
 
             throw new InvalidOperationException("Invalid distribution");
         }
+
+        public static T EquiPick<T>(IList<T> values) => values[Randomizer.GetInt(values.Count - 1)];
+
+        public static T EquiPick<T>(IEnumerable<T> values)
+        {
+            Guard.NotNull(values, nameof(values));
+            Guard.Requires(values.Any(), $"The sequence {nameof(values)} must not be empty.");
+
+            var current = default(T);
+            int count = 0;
+
+            foreach (T element in values)
+            {
+                count++;
+                if (Randomizer.GetInt(count) == 0)
+                {
+                    current = element;
+                }
+            }
+
+            return current;
+        }
     }
 }

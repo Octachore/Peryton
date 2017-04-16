@@ -36,7 +36,7 @@ namespace Utils
         public BlockEnumerator(IEnumerable<T> input, int blockSize)
         {
             Guard.NotNull(input, nameof(input));
-            Guard.Requires(blockSize > 0, $"{blockSize} must be > 0");
+            Guard.Requires(blockSize > 0, $"{nameof(blockSize)} must be > 0 but was {blockSize}.");
 
             _input = input;
             _enumerator = input.GetEnumerator();
