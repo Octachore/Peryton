@@ -46,7 +46,17 @@ namespace Learning.BaseTests
         }
 
         [Test]
-        public void SimpleLearner_Learn_WithNotEmptyInput_Learns()
+        public void SimpleLearner_Learn_WithSingleItemInput_LearnsNothing()
+        {
+            var learner = new SimpleLearner<char>();
+
+            learner.Learn(new[] { 'a' });
+
+            Assert.That(learner.GetStates(), Is.Empty);
+        }
+
+        [Test]
+        public void SimpleLearner_Learn_WithAppropriateInput_Learns()
         {
             var learner = new SimpleLearner<char>();
             string input = "abcadbbbabe";

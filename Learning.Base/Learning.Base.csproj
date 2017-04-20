@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HighOrderSimpleLearner.cs" />
     <Compile Include="SimpleLearner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
