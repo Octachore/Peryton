@@ -18,18 +18,25 @@
 // You should have received a copy of the GNU General Public License
 // along with Peryton.  If not, see <http://www.gnu.org/licenses/>.
 #endregion
-using System;
+
+using System.Collections.Generic;
 
 namespace Utils
 {
-    public static class Randomizer
+    public static class SequenceExtensions
     {
-        private static readonly Random _random = new Random();
+        public static void Swap<T>(this IList<T> seq, int i, int j)
+        {
+            Guard.Requires(i < seq.Count, $"{nameof(i)} must be < sequence count ({seq.Count}) but was {i}.");
+            Guard.Requires(j < seq.Count, $"{nameof(j)} must be < sequence count ({seq.Count}) but was {j}.");
+            Guard.Requires(i >= 0, $"{nameof(i)} must be positive but was {i}.");
+            Guard.Requires(j >= 0, $"{nameof(j)} must be positive but was {j}.");
 
-        public static int GetInt(int max = int.MaxValue) => _random.Next(max);
+            if (i == j) return;
 
-        public static int GetInt(int min, int max) => _random.Next(min, max);
-
-        public static double GetDouble(double max = double.MaxValue) => _random.NextDouble() * max;
+            T oldI = seq[i];
+            seq[i] = seq[j];
+            seq[j] = oldI;
+        }
     }
 }

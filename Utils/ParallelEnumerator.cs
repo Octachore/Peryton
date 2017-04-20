@@ -18,33 +18,39 @@
 // You should have received a copy of the GNU General Public License
 // along with Peryton.  If not, see <http://www.gnu.org/licenses/>.
 #endregion
-using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Utils
 {
-    public static class Guard
+    public class ParallelEnumerator<T>
     {
-        public static void NotNull<T>(T argument, string argumentName)
+        private readonly IEnumerator<T>[] _enumerators;
+
+        public T[] Current { get; private set; }
+
+        public ParallelEnumerator(params IEnumerable<T>[] enumerables)
         {
-            if (argument == null) throw new ArgumentNullException(argumentName);
+            Guard.NotNull(enumerables, nameof(enumerables));
+            Guard.RequiresAll(enumerables, e => e != null, index => $"The enumerable at index {index} must not be null");
+
+            _enumerators = enumerables.Select(e => e.GetEnumerator()).ToArray();
         }
 
-        public static void Requires(bool condition, string message)
+        public bool Next()
         {
-            NotNull(condition, nameof(condition));
-            if (!condition) throw new InvalidOperationException(message);
-        }
-
-        public static void RequiresAll<T>(IEnumerable<T> arguments, Func<T, bool> condition, Func<int, string> message)
-        {
-            NotNull(arguments, nameof(arguments));
-            int index = 0;
-            foreach (T argument in arguments)
+            Current = new T[_enumerators.Length];
+            bool allEnded = true;
+            for (int i = 0; i < _enumerators.Length; i++)
             {
-                if (!condition(argument)) throw new InvalidOperationException(message(index));
-                index++;
+                if (_enumerators[i].MoveNext())
+                {
+                    allEnded = false;
+                    Current[i] = _enumerators[i].Current;
+                }
+                else Current[i] = default(T);
             }
+            return !allEnded;
         }
     }
 }

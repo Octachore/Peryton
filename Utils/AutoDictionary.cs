@@ -30,6 +30,14 @@ namespace Utils
         private readonly bool _hasDefaultLambda;
         private readonly Func<TKey, TValue> _defaultLambda;
 
+        public AutoDictionary(Func<TKey, TValue> defaultLambda, IEqualityComparer<TKey> comparer) : base(comparer)
+        {
+            Guard.NotNull(defaultLambda, nameof(defaultLambda));
+
+            _defaultLambda = defaultLambda;
+            _hasDefaultLambda = true;
+        }
+
         public AutoDictionary(Func<TKey, TValue> defaultLambda)
         {
             Guard.NotNull(defaultLambda, nameof(defaultLambda));
@@ -42,6 +50,16 @@ namespace Utils
         {
             _defaultValue = defaultValue;
             _hasDefaultValue = true;
+        }
+
+        public AutoDictionary(TValue defaultValue, IEqualityComparer<TKey> comparer) : base(comparer)
+        {
+            _defaultValue = defaultValue;
+            _hasDefaultValue = true;
+        }
+
+        public AutoDictionary(IEqualityComparer<TKey> comparer) : base(comparer)
+        {
         }
 
         public AutoDictionary()

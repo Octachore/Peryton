@@ -18,18 +18,24 @@
 // You should have received a copy of the GNU General Public License
 // along with Peryton.  If not, see <http://www.gnu.org/licenses/>.
 #endregion
-using System;
+
+using System.Collections.Generic;
 
 namespace Utils
 {
-    public static class Randomizer
+    public static class Schuffler
     {
-        private static readonly Random _random = new Random();
+        public static void FisherYates<T>(IList<T> seq)
+        {
+            Guard.NotNull(seq, nameof(seq));
 
-        public static int GetInt(int max = int.MaxValue) => _random.Next(max);
+            if (seq.Count == 1) return;
 
-        public static int GetInt(int min, int max) => _random.Next(min, max);
-
-        public static double GetDouble(double max = double.MaxValue) => _random.NextDouble() * max;
+            for (int i = 0; i < seq.Count - 1; i++)
+            {
+                int j = Randomizer.GetInt(i, seq.Count);
+                seq.Swap(i, j);
+            }
+        }
     }
 }

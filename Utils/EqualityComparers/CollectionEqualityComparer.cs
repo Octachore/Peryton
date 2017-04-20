@@ -18,18 +18,31 @@
 // You should have received a copy of the GNU General Public License
 // along with Peryton.  If not, see <http://www.gnu.org/licenses/>.
 #endregion
-using System;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace Utils
+namespace Utils.EqualityComparers
 {
-    public static class Randomizer
+    public class CollectionEqualityComparer<T> : IEqualityComparer<ICollection<T>>
     {
-        private static readonly Random _random = new Random();
+        public bool Equals(ICollection<T> x, ICollection<T> y) => x != null && y != null && x.SequenceEqual(y);
 
-        public static int GetInt(int max = int.MaxValue) => _random.Next(max);
+        public int GetHashCode(ICollection<T> obj)
+        {
+            unchecked
+            {
+                const int PRIME1 = (int)2166136261;
+                const int PRIME2 = 16777619;
 
-        public static int GetInt(int min, int max) => _random.Next(min, max);
+                int hash = PRIME1;
 
-        public static double GetDouble(double max = double.MaxValue) => _random.NextDouble() * max;
+                foreach (T item in obj)
+                {
+                    hash = (hash * PRIME2) ^ obj.GetHashCode();
+                }
+                
+                return hash;
+            }
+        }
     }
 }

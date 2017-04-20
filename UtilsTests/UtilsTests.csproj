@@ -46,6 +46,7 @@
     <Compile Include="AutoDictionaryTests.cs" />
     <Compile Include="BlockEnumeratorTests.cs" />
     <Compile Include="GuardTests.cs" />
+    <Compile Include="ParallelEnumeratorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
