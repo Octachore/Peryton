@@ -25,10 +25,10 @@ using NUnit.Framework;
 
 namespace Generation.BaseTests
 {
-    public class MarkovGeneratorTests
+    public class HighOrderMarkovGeneratorTests
     {
         [Test]
-        public void MarkovGenerator_Dummy()
+        public void HighOrderMarkovGenerator_Dummy()
         {
             string[] data = new[]
             {
@@ -44,10 +44,10 @@ namespace Generation.BaseTests
                 "laurent"
             };
 
-            var learner = new SimpleLearner<char>();
+            var learner = new HighOrderSimpleLearner<char>(2);
             learner.Learn(data);
 
-            var generator = new MarkovGenerator<char>(learner.GetStates());
+            var generator = new HighOrderMarkovGenerator<char>(learner.GetStates());
 
             var strings = new List<string>();
             for (int i = 0; i < 100; i++)
