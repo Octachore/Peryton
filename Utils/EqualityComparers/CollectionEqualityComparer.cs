@@ -38,7 +38,7 @@ namespace Utils.EqualityComparers
 
                 foreach (T item in obj)
                 {
-                    hash = (hash * PRIME2) ^ obj.GetHashCode();
+                    hash = (hash * PRIME2) ^ item.GetHashCode();
                 }
                 
                 return hash;
