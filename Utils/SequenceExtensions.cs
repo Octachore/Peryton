@@ -38,5 +38,37 @@ namespace Utils
             seq[i] = seq[j];
             seq[j] = oldI;
         }
+
+        public static void Trim<T>(this IList<T> seq, T identifier)
+        {
+            TrimLeft(seq, identifier);
+            TrimRight(seq, identifier);
+        }
+
+        public static void TrimRight<T>(this IList<T> seq, T identifier)
+        {
+            Guard.NotNull(seq, nameof(seq));
+
+            if (seq.Count == 0) return;
+
+            for (int i = seq.Count - 1; i >= 0; i--)
+            {
+                if (seq[i]?.Equals(identifier) == true) seq.RemoveAt(i);
+                else break;
+            }
+        }
+
+        public static void TrimLeft<T>(this IList<T> seq, T identifier)
+        {
+            Guard.NotNull(seq, nameof(seq));
+
+            if (seq.Count == 0) return;
+
+            for (int i = 0; i < seq.Count; i++)
+            {
+                if (seq[i]?.Equals(identifier) == true) seq.RemoveAt(i);
+                else break;
+            }
+        }
     }
 }
