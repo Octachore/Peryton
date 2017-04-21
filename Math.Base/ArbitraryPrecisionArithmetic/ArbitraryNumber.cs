@@ -28,32 +28,38 @@ namespace Math.Base.ArbitraryPrecisionArithmetic
     {
         internal List<int> Digits { get; set; } = new List<int>();
 
-        internal int DecimalsCount = 0;
+        internal int _decimalsCount = 0;
 
-        public List<int> IntegerPart => new List<int>(Digits.GetRange(0, Digits.Count - DecimalsCount));
+        public bool IsNegative { get; internal set; } = false;
 
-        public List<int> FractionalPart => new List<int>(Digits.GetRange(Digits.Count - DecimalsCount, DecimalsCount));
+        public List<int> IntegerPart => new List<int>(Digits.GetRange(0, Digits.Count - _decimalsCount));
 
-        public ArbitraryNumber(IList<int> digits, int decimalsCount)
+        public List<int> FractionalPart => new List<int>(Digits.GetRange(Digits.Count - _decimalsCount, _decimalsCount));
+
+        public ArbitraryNumber(IList<int> digits, int decimalsCount, bool isNegative = false)
         {
             Guard.Requires(decimalsCount <= digits.Count, $"The value {nameof(decimalsCount)} must be less than the count of {nameof(digits)} ({digits.Count}).");
             Guard.Requires(decimalsCount >= 0, $"The value {nameof(decimalsCount)} must be positive.");
 
             Digits = new List<int>(digits);
-            DecimalsCount = decimalsCount;
+            _decimalsCount = decimalsCount;
+            IsNegative = isNegative;
         }
 
         public ArbitraryNumber()
         {
         }
 
-        public ArbitraryNumber(ArbitraryNumber other) : this(new List<int>(other.Digits), other.DecimalsCount)
+        public ArbitraryNumber(ArbitraryNumber other) : this(new List<int>(other.Digits), other._decimalsCount)
         {
         }
 
         public ArbitraryNumber Add(ArbitraryNumber other) => Operations.Add(this, other);
 
         public static ArbitraryNumber operator +(ArbitraryNumber a, ArbitraryNumber b) => a?.Add(b);
+
+        public static ArbitraryNumber operator -(ArbitraryNumber a) => new ArbitraryNumber(a) { IsNegative = !a.IsNegative };
+        public static ArbitraryNumber operator -(ArbitraryNumber a, ArbitraryNumber b) => Operations.Sub(a, b);
 
         public override string ToString() => $"{string.Concat(IntegerPart)}.{string.Concat(FractionalPart)}";
     }

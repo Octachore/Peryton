@@ -26,7 +26,7 @@ namespace Math.BaseTests.ArbitraryPrecisionArithmetic
     public class OperationsTests
     {
         [Test]
-        public void Operations_Add_WithValidArbitraryNumbers_ReturnsNewCorrectArbitraryNumber()
+        public void Operations_Add_WithPositiveArbitraryNumbers_ReturnsNewCorrectArbitraryNumber()
         {
             var an1 = new ArbitraryNumber(new[] { 1, 5, 7, 4, 1, 2, 3, 6, 5 }, 4);
             var an2 = new ArbitraryNumber(new[] { 9, 5, 6, 3, 1, 2 }, 2);
@@ -36,6 +36,20 @@ namespace Math.BaseTests.ArbitraryPrecisionArithmetic
             Assert.That(result.Digits, Is.EquivalentTo(new[] { 2, 5, 3, 0, 4, 3, 5, 6, 5 }));
             Assert.That(result.IntegerPart, Is.EquivalentTo(new[] { 2, 5, 3, 0, 4 }));
             Assert.That(result.FractionalPart, Is.EquivalentTo(new[] { 3, 5, 6, 5 }));
+        }
+
+        [Test]
+        public void Operations_Sub_WithPositiveArbitraryNumbers_ReturnsNewCorrectArbitraryNumber()
+        {
+            var an1 = new ArbitraryNumber(new[] { 1, 5, 7, 4, 1, 2, 3, 6, 5 }, 4);
+            var an2 = new ArbitraryNumber(new[] { 9, 5, 6, 3, 1, 2 }, 2);
+
+            ArbitraryNumber result = an1 - an2;
+
+            Assert.That(result.IsNegative, Is.False);
+            Assert.That(result.Digits, Is.EquivalentTo(new[] { 6, 1, 7, 8, 1, 1, 6, 5 }));
+            Assert.That(result.IntegerPart, Is.EquivalentTo(new[] { 6, 1, 7, 8 }));
+            Assert.That(result.FractionalPart, Is.EquivalentTo(new[] { 1, 1, 6, 5 }));
         }
     }
 }
