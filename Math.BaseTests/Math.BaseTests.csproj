@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArbitraryPrecisionArithmetic\ArbitraryNumberTests.cs" />
+    <Compile Include="ArbitraryPrecisionArithmetic\OperationsTests.cs" />
     <Compile Include="PopulationOperationsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

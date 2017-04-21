@@ -27,16 +27,44 @@ namespace Math.Base.ArbitraryPrecisionArithmetic
     {
         public static ArbitraryNumber Add(ArbitraryNumber a, ArbitraryNumber b)
         {
+            var num1 = new ArbitraryNumber(a);
+            var num2 = new ArbitraryNumber(b);
+
+            AlignFractionalDigits(num1, num2);
+
             var result = new ArbitraryNumber();
 
-            var enumerator = new ParallelEnumerator<int>(a.Digits.AsEnumerable().Reverse(), b.Digits.AsEnumerable().Reverse());
+            var enumerator = new ParallelEnumerator<int>(num1.Digits.AsEnumerable().Reverse(), num2.Digits.AsEnumerable().Reverse());
 
+            int carryOver = 0;
             while (enumerator.Next())
             {
+                int val1 = enumerator.Current[0];
+                int val2 = enumerator.Current[1];
+                int added = val1 + val2 + carryOver;
 
+                int val = added % 10;
+                carryOver = (added - val) / 10;
+
+                result.Digits.Insert(0, val);
             }
 
-            throw new System.NotImplementedException();
+            if(carryOver > 0) result.Digits.Insert(0, carryOver);
+
+            result.DecimalsCount = num1.DecimalsCount;
+
+            return result;
+        }
+
+        private static void AlignFractionalDigits(ArbitraryNumber num1, ArbitraryNumber num2)
+        {
+            if (num1.FractionalPart.Count == num2.FractionalPart.Count) return;
+
+            ArbitraryNumber lessFractional = Selector.Min(an => an.FractionalPart.Count, num1, num2);
+            ArbitraryNumber mostFractional = Selector.Max(an => an.FractionalPart.Count, num1, num2);
+
+            lessFractional.Digits.AddRange(Enumerable.Repeat(0, mostFractional.FractionalPart.Count - lessFractional.FractionalPart.Count));
+            lessFractional.DecimalsCount += mostFractional.FractionalPart.Count - lessFractional.FractionalPart.Count;
         }
     }
 }

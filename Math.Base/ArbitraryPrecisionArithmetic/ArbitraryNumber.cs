@@ -26,29 +26,35 @@ namespace Math.Base.ArbitraryPrecisionArithmetic
 {
     public class ArbitraryNumber
     {
-        private List<int> _digits = new List<int> { 0 };
+        internal List<int> Digits { get; set; } = new List<int>();
 
-        private int _decimalsCount = 0;
+        internal int DecimalsCount = 0;
 
-        public List<int> IntegerPart => new List<int>(_digits.GetRange(0, _digits.Count - _decimalsCount));
+        public List<int> IntegerPart => new List<int>(Digits.GetRange(0, Digits.Count - DecimalsCount));
 
-        public List<int> FractionalPart => new List<int>(_digits.GetRange(_digits.Count - _decimalsCount, _decimalsCount));
-
-        internal List<int> Digits => new List<int>(_digits);
+        public List<int> FractionalPart => new List<int>(Digits.GetRange(Digits.Count - DecimalsCount, DecimalsCount));
 
         public ArbitraryNumber(IList<int> digits, int decimalsCount)
         {
             Guard.Requires(decimalsCount <= digits.Count, $"The value {nameof(decimalsCount)} must be less than the count of {nameof(digits)} ({digits.Count}).");
             Guard.Requires(decimalsCount >= 0, $"The value {nameof(decimalsCount)} must be positive.");
 
-            _digits = new List<int>(digits);
-            _decimalsCount = decimalsCount;
+            Digits = new List<int>(digits);
+            DecimalsCount = decimalsCount;
         }
 
-        public ArbitraryNumber() : this(new[] { 0 }, 0)
+        public ArbitraryNumber()
+        {
+        }
+
+        public ArbitraryNumber(ArbitraryNumber other) : this(new List<int>(other.Digits), other.DecimalsCount)
         {
         }
 
         public ArbitraryNumber Add(ArbitraryNumber other) => Operations.Add(this, other);
+
+        public static ArbitraryNumber operator +(ArbitraryNumber a, ArbitraryNumber b) => a?.Add(b);
+
+        public override string ToString() => $"{string.Concat(IntegerPart)}.{string.Concat(FractionalPart)}";
     }
 }
