@@ -69,6 +69,87 @@ namespace Math.Base.ArbitraryPrecisionArithmetic
             }
         }
 
+        public static ArbitraryNumber Mult(ArbitraryNumber a, ArbitraryNumber b)
+        {
+            if (a.IsNegative == b.IsNegative) return MultPositives(Abs(a), Abs(b));
+            else return -MultPositives(Abs(a), Abs(b));
+        }
+
+        public static ArbitraryNumber Pow(ArbitraryNumber a, int pow)
+        {
+            if (pow == 0) return 1;
+            throw new System.NotImplementedException();
+        }
+
+        public static ArbitraryNumber Pow(ArbitraryNumber a, ArbitraryNumber pow)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        private static ArbitraryNumber MultPositives(ArbitraryNumber arbitraryNumber1, ArbitraryNumber arbitraryNumber2)
+        {
+            var result = new ArbitraryNumber();
+            var an = new ArbitraryNumber(arbitraryNumber1);
+
+            foreach (int digit in arbitraryNumber2.Digits.AsEnumerable().Reverse())
+            {
+                result += MultBySingleDigit(an, digit);
+                an.Digits.Add(0);
+            }
+
+
+            result.DecimalsCount += arbitraryNumber2.DecimalsCount;
+
+            Trim(result);
+
+            return result;
+        }
+
+        private static ArbitraryNumber MultBySingleDigit(ArbitraryNumber an, int digit)
+        {
+            Guard.Requires(0 <= digit && digit < 10, $"Requires 0 <= {nameof(digit)} < 10, but actual value was {digit}");
+
+            var result = new ArbitraryNumber();
+
+            int carryOver = 0;
+            foreach (int d in an.Digits.AsEnumerable().Reverse())
+            {
+                int mul = d * digit + carryOver;
+                int val = mul % 10;
+                carryOver = (mul - val) / 10;
+
+                result.Digits.Insert(0, val);
+            }
+
+            while (carryOver > 0)
+            {
+                int val = carryOver % 10;
+                result.Digits.Insert(0, val);
+                carryOver = (carryOver - val) / 10;
+            }
+
+            result.DecimalsCount = an.DecimalsCount;
+
+            Trim(result);
+
+            return result;
+        }
+
+        private static void InsertdecimalShift(ArbitraryNumber intermediateResult, int decimalShift)
+        {
+            for (int i = 0; i < decimalShift; i++)
+            {
+                intermediateResult.Digits.Insert(0, 0);
+            }
+        }
+
+        private static ArbitraryNumber Abs(ArbitraryNumber num)
+        {
+            var abs = new ArbitraryNumber(num);
+            abs.IsNegative = false;
+            return abs;
+        }
+
         private static ArbitraryNumber SubstractPositives(ArbitraryNumber a, ArbitraryNumber b)
         {
             var num1 = new ArbitraryNumber(a);
@@ -108,7 +189,7 @@ namespace Math.Base.ArbitraryPrecisionArithmetic
                 result.IsNegative = true;
             }
 
-            result._decimalsCount = num1._decimalsCount;
+            result.DecimalsCount = num1.DecimalsCount;
 
             Trim(result);
 
@@ -141,7 +222,7 @@ namespace Math.Base.ArbitraryPrecisionArithmetic
 
             if (carryOver > 0) result.Digits.Insert(0, carryOver);
 
-            result._decimalsCount = num1._decimalsCount;
+            result.DecimalsCount = num1.DecimalsCount;
 
             Trim(result);
 
@@ -150,8 +231,15 @@ namespace Math.Base.ArbitraryPrecisionArithmetic
 
         private static void Trim(ArbitraryNumber num)
         {
-            if (num._decimalsCount > 0) num.Digits.Trim(0);
-            else num.Digits.TrimLeft(0);
+
+            if (num.DecimalsCount > 0)
+            {
+                int initialDigitsCount = num.Digits.Count;
+                num.Digits.TrimRight(0, num.DecimalsCount);
+                num.DecimalsCount -= initialDigitsCount - num.Digits.Count;
+            }
+            num.Digits.TrimLeft(0);
+            if (!num.Digits.Any()) num.DecimalsCount = 0;
         }
 
         private static void AlignFractionalDigits(ArbitraryNumber num1, ArbitraryNumber num2)
@@ -162,7 +250,7 @@ namespace Math.Base.ArbitraryPrecisionArithmetic
             ArbitraryNumber mostFractional = Selector.Max(an => an.FractionalPart.Count, num1, num2);
 
             lessFractional.Digits.AddRange(Enumerable.Repeat(0, mostFractional.FractionalPart.Count - lessFractional.FractionalPart.Count));
-            lessFractional._decimalsCount += mostFractional.FractionalPart.Count - lessFractional.FractionalPart.Count;
+            lessFractional.DecimalsCount += mostFractional.FractionalPart.Count - lessFractional.FractionalPart.Count;
         }
     }
 }

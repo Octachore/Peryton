@@ -21,6 +21,7 @@
 
 using System;
 using System.Collections.Generic;
+using static System.Math;
 
 namespace Utils
 {
@@ -46,13 +47,13 @@ namespace Utils
             TrimRight(seq, identifier);
         }
 
-        public static void TrimRight<T>(this IList<T> seq, T identifier)
+        public static void TrimRight<T>(this IList<T> seq, T identifier, int? limit = null)
         {
             Guard.NotNull(seq, nameof(seq));
 
             if (seq.Count == 0) return;
-
-            for (int i = seq.Count - 1; i >= 0; i--)
+            int max = Max(0, seq.Count - limit ?? seq.Count);
+            for (int i = seq.Count - 1; i >= max; i--)
             {
                 if (seq[i]?.Equals(identifier) == true) seq.RemoveAt(i);
                 else break;
