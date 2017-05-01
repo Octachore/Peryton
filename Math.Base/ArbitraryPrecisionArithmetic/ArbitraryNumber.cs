@@ -60,6 +60,7 @@ namespace Math.Base.ArbitraryPrecisionArithmetic
         public static ArbitraryNumber operator +(ArbitraryNumber a, ArbitraryNumber b) => Operations.Add(a, b);
 
         public static ArbitraryNumber operator *(ArbitraryNumber a, ArbitraryNumber b) => Operations.Mult(a, b);
+        public static ArbitraryNumber operator /(ArbitraryNumber a, ArbitraryNumber b) => Operations.Div(a, b);
 
         public static ArbitraryNumber operator -(ArbitraryNumber a) => new ArbitraryNumber(a) { IsNegative = !a.IsNegative };
 

@@ -82,5 +82,22 @@ namespace Math.BaseTests.ArbitraryPrecisionArithmetic
             Assert.That(result.IntegerPart, Is.EquivalentTo(new[] { 6, 1, 7, 8 }));
             Assert.That(result.FractionalPart, Is.EquivalentTo(new[] { 1, 1, 6, 5 }));
         }
+
+        [TestCase(new[] { 1, 5, 7, 4, 1, 2, 3, 6, 5 }, 4, false, 2, new[] { 2, 4, 7, 7, 8, 6, 5, 2, 6, 5, 4, 8, 9, 3, 2, 2, 5 }, 8, false)]
+        [TestCase(new[] { 1, 5, 7, 4, 1, 2, 3, 6, 5 }, 4, false, 3, new[] { 3, 9, 0, 0, 4, 6, 6, 3, 1, 5, 9, 2, 0, 2, 7, 1, 3, 6, 9, 7, 2, 7, 1, 2, 5 }, 12, false)]
+        [TestCase(new[] { 1, 5, 7, 4, 1, 2, 3, 6, 5 }, 4, false, 12, new[] { 2, 3, 1, 4, 5, 4, 7, 6, 5, 4, 2, 2, 4, 1, 6, 2, 5, 9, 0, 2, 5, 4, 7, 4, 5, 7, 0, 7, 0, 3, 8, 7, 8, 6, 0, 7, 0, 1, 1, 5, 3, 3, 5, 6, 2, 0, 8, 6, 2, 6, 1, 4, 8, 9, 4, 9, 8, 6, 4, 3, 0, 2, 2, 1, 9, 7, 3, 0, 7, 1, 5, 3, 4, 7, 3, 3, 9, 5, 7, 1, 7, 0, 8, 3, 8, 2, 0, 5, 8, 6, 1, 8, 1, 6, 4, 0, 6, 2, 5 }, 48, false)]
+        [TestCase(new[] { 1, 5, 7, 4, 1, 2, 3, 6, 5 }, 4, true, 2, new[] { 2, 4, 7, 7, 8, 6, 5, 2, 6, 5, 4, 8, 9, 3, 2, 2, 5 }, 8, false)]
+        [TestCase(new[] { 1, 5, 7, 4, 1, 2, 3, 6, 5 }, 4, true, 3, new[] { 3, 9, 0, 0, 4, 6, 6, 3, 1, 5, 9, 2, 0, 2, 7, 1, 3, 6, 9, 7, 2, 7, 1, 2, 5 }, 12, true)]
+        [TestCase(new[] { 1, 5, 7, 4, 1, 2, 3, 6, 5 }, 4, true, 12, new[] { 2, 3, 1, 4, 5, 4, 7, 6, 5, 4, 2, 2, 4, 1, 6, 2, 5, 9, 0, 2, 5, 4, 7, 4, 5, 7, 0, 7, 0, 3, 8, 7, 8, 6, 0, 7, 0, 1, 1, 5, 3, 3, 5, 6, 2, 0, 8, 6, 2, 6, 1, 4, 8, 9, 4, 9, 8, 6, 4, 3, 0, 2, 2, 1, 9, 7, 3, 0, 7, 1, 5, 3, 4, 7, 3, 3, 9, 5, 7, 1, 7, 0, 8, 3, 8, 2, 0, 5, 8, 6, 1, 8, 1, 6, 4, 0, 6, 2, 5 }, 48, false)]
+        public void Operations_Pow_WithPositiveIntegerExponent_ReturnsNewCorrectArbitraryNumber(int[] digits, int decimalCount, bool isNegative, int power, int[] expectedDigits, int expectedDecimalCount, bool expectedIsNegative)
+        {
+            var an = new ArbitraryNumber(digits, decimalCount, isNegative);
+
+            ArbitraryNumber result = an.Pow(power);
+
+            Assert.That(result.Digits, Is.EquivalentTo(expectedDigits));
+            Assert.That(result.DecimalsCount, Is.EqualTo(expectedDecimalCount));
+            Assert.That(result.IsNegative, Is.EqualTo(expectedIsNegative));
+        }
     }
 }

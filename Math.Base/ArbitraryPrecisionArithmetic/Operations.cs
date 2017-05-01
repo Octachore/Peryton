@@ -75,9 +75,21 @@ namespace Math.Base.ArbitraryPrecisionArithmetic
             else return -MultPositives(Abs(a), Abs(b));
         }
 
-        public static ArbitraryNumber Pow(ArbitraryNumber a, int pow)
+        public static ArbitraryNumber Pow(this ArbitraryNumber a, int pow)
         {
             if (pow == 0) return 1;
+
+            ArbitraryNumber result = 1;
+
+            for (int i = 0; i < pow; i++) result *= a;
+
+            Trim(result);
+
+            return pow > 0 ? result : 1 / result;
+        }
+
+        public static ArbitraryNumber Div(ArbitraryNumber a, ArbitraryNumber b)
+        {
             throw new System.NotImplementedException();
         }
 
