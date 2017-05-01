@@ -36,15 +36,17 @@ namespace Utils
             if (!condition) throw new InvalidOperationException(message);
         }
 
-        public static void RequiresAll<T>(IEnumerable<T> arguments, Func<T, bool> condition, Func<int, string> message)
+        public static void RequiresAll<T>(IEnumerable<T> arguments, Func<T, int, bool> condition, Func<T, int, string> message)
         {
             NotNull(arguments, nameof(arguments));
             int index = 0;
             foreach (T argument in arguments)
             {
-                if (!condition(argument)) throw new InvalidOperationException(message(index));
+                if (!condition(argument, index)) throw new InvalidOperationException(message(argument, index));
                 index++;
             }
         }
+
+        public static void RequiresAll(IList<int> digits, string v, Func<object, object, object> p1, Func<object, object, string> p2) => throw new NotImplementedException();
     }
 }

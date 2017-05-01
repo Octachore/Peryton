@@ -32,7 +32,7 @@ namespace Utils
         public ParallelEnumerator(params IEnumerable<T>[] enumerables)
         {
             Guard.NotNull(enumerables, nameof(enumerables));
-            Guard.RequiresAll(enumerables, e => e != null, index => $"The enumerable at index {index} must not be null");
+            Guard.RequiresAll(enumerables, (e, i) => e != null, (e, i) => $"The enumerable at index {i} must not be null");
 
             _enumerators = enumerables.Select(e => e.GetEnumerator()).ToArray();
         }

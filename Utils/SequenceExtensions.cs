@@ -19,6 +19,7 @@
 // along with Peryton.  If not, see <http://www.gnu.org/licenses/>.
 #endregion
 
+using System;
 using System.Collections.Generic;
 
 namespace Utils
@@ -68,6 +69,29 @@ namespace Utils
             {
                 if (seq[i]?.Equals(identifier) == true) seq.RemoveAt(i);
                 else break;
+            }
+        }
+
+        public static IEnumerable<T> After<T>(this IEnumerable<T> seq, T value) => seq.After(t => t?.Equals(value) ?? false);
+
+        public static IEnumerable<T> Before<T>(this IEnumerable<T> seq, T value) => seq.Before(t => t?.Equals(value) ?? false);
+
+        public static IEnumerable<T> After<T>(this IEnumerable<T> seq, Func<T, bool> f)
+        {
+            bool started = false;
+            foreach (T item in seq)
+            {
+                if (f(item)) started = true;
+                if (started) yield return item;
+            }
+        }
+
+        public static IEnumerable<T> Before<T>(this IEnumerable<T> seq, Func<T, bool> f)
+        {
+            foreach (T item in seq)
+            {
+                if (f(item)) yield break;
+                yield return item;
             }
         }
     }
